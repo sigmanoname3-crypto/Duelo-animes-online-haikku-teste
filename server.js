@@ -1,5 +1,5 @@
 const http=require('http'),fs=require('fs'),path=require('path'),{WebSocketServer}=require('ws'),Game=require('./game.js');
-const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
+const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/muda-giorno.mp3':'muda-giorno.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
 const T={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.mp3':'audio/mpeg'};
 const server=http.createServer((req,res)=>{
  const f=FILES[req.url.split('?')[0]];
@@ -38,8 +38,8 @@ wss.on('connection',ws=>{
   if(d.t==='find'){leave(ws,false);unq(ws);const q=d.t2?'2':'1',w=waits[q];ws.q=q;
    if(w&&w.readyState===1){waits[q]=null;pair(w,ws,!!d.t2)}else{waits[q]=ws;ws.send('{"t":"queued"}')}}
   else if(d.t==='cancel'){unq(ws);leave(ws,true)}
-  else if(d.t==='pick'&&m&&!m.S&&m.team){m.pick[i]=Number.isInteger(d.ch)&&d.ch>=0&&d.ch<=7?d.ch:0;m.rdy[i]=false;teamOpp(m)}
-  else if(d.t==='pick'&&m&&!m.S){m.pick[i]=m.t2?(Array.isArray(d.ch)?[...new Set(d.ch.filter(c=>Number.isInteger(c)&&c>=0&&c<=7))].slice(0,2):[]):(d.ch===1?1:d.ch===2?2:d.ch===3?3:d.ch===4?4:d.ch===5?5:d.ch===6?6:d.ch===7?7:0);m.rdy[i]=false;tell(o,m,i)}
+  else if(d.t==='pick'&&m&&!m.S&&m.team){m.pick[i]=Number.isInteger(d.ch)&&d.ch>=0&&d.ch<=9?d.ch:0;m.rdy[i]=false;teamOpp(m)}
+  else if(d.t==='pick'&&m&&!m.S){m.pick[i]=m.t2?(Array.isArray(d.ch)?[...new Set(d.ch.filter(c=>Number.isInteger(c)&&c>=0&&c<=9))].slice(0,2):[]):(d.ch===1?1:d.ch===2?2:d.ch===3?3:d.ch===4?4:d.ch===5?5:d.ch===6?6:d.ch===7?7:d.ch===8?8:d.ch===9?9:0);m.rdy[i]=false;tell(o,m,i)}
   else if(d.t==='opts'&&m&&!m.S&&i===0){m.o={map:d.map===1?1:0,mus:d.mus?1:0};if(o&&o.readyState===1)o.send(JSON.stringify({t:'opts',map:m.o.map,mus:m.o.mus}))}
   else if(d.t==='ready'&&m&&!m.S&&m.team){m.rdy[i]=true;teamOpp(m);if(m.rdy.every(Boolean))begin(m)}
   else if(d.t==='ready'&&m&&!m.S&&(!m.t2||m.pick[i].length===2)){m.rdy[i]=true;tell(o,m,i);if(m.rdy[0]&&m.rdy[1])begin(m)}
