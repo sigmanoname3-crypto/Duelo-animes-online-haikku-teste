@@ -15,6 +15,7 @@ function pair(a,b,t2){
  a.m=b.m=m;a.inp={};b.inp={};matches.add(m);
  [a,b].forEach((w,i)=>w.send(JSON.stringify({t:'match',me:i})))}
 const teamQ=[];
+function tqSend(){teamQ.forEach(w=>{if(w.readyState===1)w.send(JSON.stringify({t:'tq',n:teamQ.length}))})}
 function pairTeam(list){const m={team:true,t2:false,p:list,pick:[0,0,0,0],rdy:[false,false,false,false],S:null,end:0,o:{map:0,mus:1}};
  list.forEach(w=>{w.m=m;w.inp={};w.q=null});matches.add(m);
  list.forEach((w,i)=>w.send(JSON.stringify({t:'match',me:i<2?0:1,team:true})))}
@@ -28,12 +29,12 @@ function begin(m){if(m.team)return beginTeam(m);
  m.S=m.t2?{f:[Game.mkP(182,1,m.pick[0][0],0),Game.mkP(490,-1,m.pick[1][0],1)],bn:[Game.mkP(182,1,m.pick[0][1],0),Game.mkP(490,-1,m.pick[1][1],1)],pr:[],over:0}:{f:[Game.mkP(182,1,m.pick[0],0),Game.mkP(490,-1,m.pick[1],1)],pr:[],over:0};
  m.p.forEach((w,i)=>{w.inp={};w.send(JSON.stringify({t:'start',me:i,S:m.S,o:m.o}))})}
 function tell(o,m,i){if(o&&o.readyState===1)o.send(JSON.stringify({t:'opp',ch:m.pick[i],ready:m.rdy[i]}))}
-function unq(ws){if(ws.q==='T'){const k=teamQ.indexOf(ws);if(k>=0)teamQ.splice(k,1)}if(ws.q&&waits[ws.q]===ws)waits[ws.q]=null;ws.q=null}
+function unq(ws){if(ws.q==='T'){const k=teamQ.indexOf(ws);if(k>=0){teamQ.splice(k,1);tqSend()}}if(ws.q&&waits[ws.q]===ws)waits[ws.q]=null;ws.q=null}
 wss.on('connection',ws=>{
  ws.inp={};
  ws.on('message',raw=>{let d;try{d=JSON.parse(raw)}catch{return}
   const m=ws.m,i=m?m.p.indexOf(ws):-1,o=m&&m.p[1-i];
-  if(d.t==='find'&&d.team){leave(ws,false);unq(ws);ws.q='T';teamQ.push(ws);if(teamQ.length>=4){const l=teamQ.splice(0,4);l.forEach(w=>w.q=null);pairTeam(l)}else ws.send('{"t":"queued"}');return}
+  if(d.t==='find'&&d.team){leave(ws,false);unq(ws);ws.q='T';teamQ.push(ws);if(teamQ.length>=4){const l=teamQ.splice(0,4);l.forEach(w=>w.q=null);pairTeam(l)}else{ws.send('{"t":"queued"}');tqSend()}return}
   if(d.t==='find'){leave(ws,false);unq(ws);const q=d.t2?'2':'1',w=waits[q];ws.q=q;
    if(w&&w.readyState===1){waits[q]=null;pair(w,ws,!!d.t2)}else{waits[q]=ws;ws.send('{"t":"queued"}')}}
   else if(d.t==='cancel'){unq(ws);leave(ws,true)}
