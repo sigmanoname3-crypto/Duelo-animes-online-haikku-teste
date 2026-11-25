@@ -101,7 +101,7 @@ canvas{width:100%;flex:1;min-height:0;display:block;object-fit:contain}
 <button id="rot">⟳ Girar tela</button><div id="toast"></div>
 <div class="ov" id="ov">
 <section id="s-title" class="on"><h1>Duelo Dourado</h1><button id="play">Jogar</button></section>
-<section id="s-fmt"><h2>Formato</h2><button id="f1">1 vs 1</button><button id="f2">2 vs 2</button><button class="ghost" id="backf">Voltar</button></section>
+<section id="s-fmt"><h2>Formato</h2><button id="f1">1 vs 1</button><button id="f2">2vs2</button><button id="f3">Modo tag</button><button class="ghost" id="backf">Voltar</button></section>
 <section id="s-modes"><h2 id="mt2">Modo de jogo</h2><button id="bot">Contra Robô</button><button id="net">PvP Online</button><button class="ghost" id="back">Voltar</button></section>
 <section id="s-wait"><h2>Procurando oponente…</h2><button class="ghost" id="cwait">Cancelar</button></section>
 <section id="s-sel"><h2 id="selh">Escolha seu lutador</h2><p id="fuprev"></p>
@@ -121,7 +121,7 @@ const COL=[{skin:'#f2c7a3',hair:'#17131a',shirt:'#2459c8',pants:'#f0731c',shoe:'
 {skin:'#ffe27a',hair:'#ffd21f',shirt:'#3fc04a',pants:'#6b4030',shoe:'#3a2314',ki:'#9dff6a'},
 {skin:'rgba(0,0,0,0)',hair:'rgba(0,0,0,0)',shirt:'rgba(0,0,0,0)',pants:'rgba(0,0,0,0)',shoe:'rgba(0,0,0,0)',ki:'#9dff6a'},
 {skin:'#f2c7a3',hair:'#17131a',shirt:'#1a2aa8',pants:'#1a2aa8',shoe:'#eceef2',ki:'#b44dff'}];
-let t2=false,pk=[],opk=[],lastCh=-1,S=null,mode='',me=0,ws=null,sel=0,cur=0,osel=1,oready=false,waiting=false,ended=false,last=0,inp={};
+let t2=false,team=false,pk=[],opk=[],lastCh=-1,S=null,mode='',me=0,ws=null,sel=0,cur=0,osel=1,oready=false,waiting=false,ended=false,last=0,inp={};
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 const ov=$('ov'),send=o=>ws&&ws.readyState===1&&ws.send(JSON.stringify(o));
 let netO=null;const effMus=()=>netO?!!netO.mus:musOn,effMap=()=>netO?netO.map:MAPI,isP2=()=>mode==='net'&&me===1;
@@ -196,12 +196,12 @@ function rnd2(){const a=[0,1,2,3,4,5,6,7].sort(()=>Math.random()-.5);return a.sl
 function toSel(){S=null;cur=t2?(pk[0]||0):sel;pg=pgOf(cur);opg=null;oready=false;$('selh').textContent=t2?'Escolha 2 lutadores (o 1º entra primeiro)':'Escolha seu lutador';renderSel();if(!t2)$('fight').disabled=false;scr('sel')}
 function nm(i){const f=S.f[i],b=S.bn&&S.bn[i],z=S.fz&&S.fz[i];return chOf(f).n+(me===i?' (você)':'')+(f.dn>0?' <small>· DINO '+Math.ceil(f.dn)+'s</small>':'')+(z?' <small>· FUSÃO '+Math.ceil(z.t)+'s</small>':b?' <small>· reserva: '+chOf(b).n+' '+Math.round(Math.max(0,b.hp)/b.mhp*100)+'%</small>':'')}
 function labels(){const f=S.f[me];lastCh=f.ch;btn.pw.querySelector('small').textContent=chOf(f).skill;
- btn.sp.innerHTML=(f.ch===1?'SHURIKEN':f.ch===3?'DINOSSAURO':f.ch===10?'SSJB':(f.ch===11||f.ch===Game.DIO_F)?'TORNADUA':FZ(f.ch)?'SUPER':'SSJ')+'<small>R</small>';btn.sp.style.display=(f.ch===2||f.ch===12||f.ch===13||f.v)?'none':'';btn.tg.style.display=S.bn?'':'none'}
+ btn.sp.innerHTML=(f.ch===1?'SHURIKEN':f.ch===3?'DINOSSAURO':f.ch===10?'SSJB':(f.ch===11||f.ch===Game.DIO_F)?'TORNADUA':FZ(f.ch)?'SUPER':'SSJ')+'<small>R</small>';btn.sp.style.display=(f.ch===2||f.ch===12||f.ch===13||f.v)?'none':'';btn.tg.style.display=S.bn&&!S.team?'':'none'}
 function begin(i){me=i;inp={};ended=false;
  $('n1').innerHTML=nm(0);$('n2').innerHTML=nm(1);labels();$('pad').classList.remove('c8');$('pad').classList.add('c9');$('pad').style.setProperty('--cols',5);scr('')}
 function showEnd(){ended=true;$('mt').textContent=S.win===me?'Vitória!':'Derrota';scr('end')}
 function startBot(){mode='bot';netO=null;S=t2?{f:[mkP(182,1,pk[0],0),mkP(490,-1,opk[0],1)],bn:[mkP(182,1,pk[1],0),mkP(490,-1,opk[1],1)],pr:[],over:0}:{f:[mkP(182,1,sel,0),mkP(490,-1,osel,1)],pr:[],over:0};begin(0)}
-function startNet(){pk=[];mode='';S=null;scr('wait');waiting=true;conn(()=>send({t:'find',t2}))}
+function startNet(){pk=[];mode='';S=null;scr('wait');waiting=true;conn(()=>send({t:'find',t2,team}))}
 function conn(cb){
  if(ws&&ws.readyState===1)return cb();
  ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host);
@@ -216,8 +216,9 @@ function conn(cb){
  ws.onclose=()=>{const was=mode==='net'||waiting;ws=null;if(was){mode='';waiting=false;S=null;scr('modes');toast('Sem conexão com o servidor.')}}}
 $('play').onclick=()=>scr('fmt');
 $('backf').onclick=()=>scr('title');
-$('f1').onclick=()=>{t2=false;$('mt2').textContent='1 vs 1';scr('modes')};
-$('f2').onclick=()=>{t2=true;$('mt2').textContent='2 vs 2';scr('modes')};
+$('f1').onclick=()=>{t2=false;team=false;$('mt2').textContent='1 vs 1';scr('modes')};
+$('f2').onclick=()=>{t2=false;team=true;$('mt2').textContent='2vs2';scr('modes')};
+$('f3').onclick=()=>{t2=true;team=false;$('mt2').textContent='Modo tag';scr('modes')};
 $('back').onclick=()=>scr('fmt');
 const NP=Math.ceil(ORD.length/PGN),goPg=d=>{pg=(pg+d+NP)%NP;if(pgOf(cur)!==pg)cur=pgIds(pg)[0];renderSel()},goOpg=d=>{const c=opg!==null?opg:(Array.isArray(opk)?(opk.length?pgOf(opk[0]):0):pgOf(osel));opg=(c+d+NP)%NP;renderSel()};
 $('al').onclick=()=>goPg(-1);$('ar').onclick=()=>goPg(1);$('oal').onclick=()=>goOpg(-1);$('oar').onclick=()=>goOpg(1);
@@ -953,7 +954,7 @@ function loop(ts){
   if(dyf){x.save();x.textAlign='center';x.font='italic 800 34px Impact,sans-serif';x.fillStyle='#fff';x.shadowColor='#fff';x.shadowBlur=18;x.globalAlpha=.7+.3*Math.sin(performance.now()/120);x.fillText('NIKA…',W/2,60);x.restore()}
   {const a1=nm(0),a2=nm(1);if($('n1').dataset.v!==a1){$('n1').dataset.v=a1;$('n1').innerHTML=a1}if($('n2').dataset.v!==a2){$('n2').dataset.v=a2;$('n2').innerHTML=a2}}if(S.bn)btn.tg.style.opacity=S.bn[me].hp>0&&!(S.sc&&S.sc[me]>0)?1:.45
   if(S.f[me].ch!==lastCh)labels();
-  {const fa=S.bn&&!(S.fu1&&S.fu1[me]);btn.fu.style.display=fa?'':'none';if(fa){const f0=S.f[me];btn.fu.style.opacity=canF(f0,S.bn[me])&&f0.en>=FU_COST&&S.bn[me].hp>0?1:.45}}
+  {const fa=S.bn&&!S.team&&!(S.fu1&&S.fu1[me]);btn.fu.style.display=fa?'':'none';if(fa){const f0=S.f[me];btn.fu.style.opacity=canF(f0,S.bn[me])&&f0.en>=FU_COST&&S.bn[me].hp>0?1:.45}}
   const nb=$('nika'),sh=!S.over&&S.f[me].dy>0;nb.style.display=sh?'flex':'none';if(sh)nb.querySelector('small').textContent=Math.ceil(S.f[me].dy)+'s';
   $('hp1').style.width=S.f[0].hp/S.f[0].mhp*100+'%';$('hp2').style.width=S.f[1].hp/S.f[1].mhp*100+'%';$('en1').style.width=S.f[0].en+'%';$('en2').style.width=S.f[1].en+'%';
   btn.pw.style.opacity=S.f[me].en>=chOf(S.f[me]).cost?1:.45;btn.sp.style.opacity=S.f[me].en>=chOf(S.f[me]).sp&&!(S.f[me].ch===0&&S.f[me].tr>0)&&!(S.f[me].ch===3&&S.f[me].din)?1:.45;{const mg=S.f[me].ch===11,mi=S.f[me].ch===Game.IP,l3=(mg||mi)?'BEATDOWN':'ARCO-ÍRIS';btn.sp3.style.display=(S.f[me].ch===10||mg||mi)?'':'none';if(btn.sp3.dataset.l!==l3){btn.sp3.dataset.l=l3;btn.sp3.innerHTML=l3+'<small>Z</small>'}btn.sp3.style.opacity=S.f[me].en>=(mg?CH[5].sp3:mi?CH[6].sp3:Game.SP3C)&&!(mg&&(S.f[1-me].bd>0||(S.f[me].balls||0)<2))&&!(mi&&S.f[1-me].bd>0)?1:.45}const mf=S.f[me],hs=hasSp2(mf);{const pl=mf.ch===Game.DIO_F?'STEEL BALL':FZ(mf.ch)?'PODER':(chOf(mf).skill||'Poder').toUpperCase();if(btn.pw.dataset.l!==pl){btn.pw.dataset.l=pl;btn.pw.innerHTML=pl+'<small>E</small>'}}btn.sp2.style.display=hs?'':'none';if(hs){const lb=mf.ch===1?'RASEN':mf.ch===3?'DIGOS SAUROS':mf.ch===11?'ACERTO':mf.ch===12?'GAZELA':mf.ch===13?'AGARRÃO':FZ(mf.ch)?'RAJADA':'RAIO DO CÉU';if(btn.sp2.dataset.l!==lb){btn.sp2.dataset.l=lb;btn.sp2.innerHTML=lb+'<small>Q</small>'}btn.sp2.style.opacity=mf.en>=sp2c(mf)?1:.45}if(mf.ch===11&&(mf.balls||0)<1)btn.pw.style.opacity=btn.sp.style.opacity=btn.sp2.style.opacity=.45;if(mf.ch===Game.DIO_F){if((mf.balls||0)<1)btn.pw.style.opacity=.45;if((mf.balls||0)<1||S.f[1-me].tw>0)btn.sp.style.opacity=.45}}
