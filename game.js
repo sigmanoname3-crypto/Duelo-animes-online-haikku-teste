@@ -296,7 +296,7 @@ function unfuse(S,i){
  for(const c of[z.a,z.b]){c.hp=Math.max(1,Math.min(c.mhp,c.hp*r));c.x=F.x;c.dir=F.dir;c.y=F.y||0;c.vy=F.vy||0;c.s='idle';c.t=0;c.done=false;c.g=false;c.pt=0;c.pz=0;c.tw=0;c.orb=0;c.i=i}
  z.a.dn=F.dn||0;z.a.en=Math.min(100,F.en);z.b.en=Math.min(100,F.en*.5);
  S.f[i]=z.a;S.bn[i]=z.b;S.fz[i]=null;(S.sc||(S.sc=[0,0]))[i]=SWAPCD;(S.ex||(S.ex=[])).push({x:F.x,t:0,k:8,c:0})}
-const CS_T=9.5,CS_AT=20,KC_T=10,KC_AT=10,GX_T=11,GX_AT=30;
+const CS_T=9.5,CS_AT=20,KC_T=10,KC_AT=10,GX_T=18.5,GX_AT=30;
 const SNAP=new WeakMap(),BTD_BACK=60,BTD_HP=.7,BTD_TH=.4,BTD_FREEZE=1.5;
 function snapSave(S){let L=SNAP.get(S);if(!L){L=[];SNAP.set(S,L)}const last=L[L.length-1];if(last&&S.mt-last.t<1)return;
  try{L.push({t:S.mt,d:structuredClone({f:S.f,bn:S.bn,fz:S.fz,fu1:S.fu1,sc:S.sc,mn:S.mn,csd:S.csd})})}catch(e){return}
@@ -310,7 +310,7 @@ function btdCheck(S){const i=S.f.findIndex(f=>f.ch===KR&&f.rq>0&&f.kb&&!f.btdU&&
 function tick(S,a,b,dt){
  if(S.bt){S.bt.t+=dt;if(S.bt.t>=BTD_FREEZE)S.bt=null;return}
  if(S.kc){S.kc.t+=dt;if(S.kc.t>=KC_T){const f=S.f[S.kc.i];f.rq=2;S.kc=null;S.kcd=1}return}
- if(S.gx){S.gx.t+=dt;if(S.gx.t>=GX_T){S.gx=null;S.gxd=1}return}
+ if(S.gx){S.gx.t+=dt;if(S.gx.t>=GX_T){const gf=S.f[S.gx.i];if(gf)gf.ger=1;S.gx=null;S.gxd=1}return}
  if(S.cs){S.cs.t+=dt;if(S.cs.t>=CS_T){const f=S.f[S.cs.i];f.br=1;f.hf=.8;f.hc=BR_HITS;S.cs=null;S.csd=1}return}
  if(!S.over){S.mt=(S.mt||0)+dt;snapSave(S);if(!S.kcd&&S.mt>=KC_AT){const i=S.f.findIndex(f=>f.ch===KR&&f.hp>0&&!(f.rq>0));if(i>=0)S.kc={t:0,i};else S.kcd=1}
   if(!S.gxd&&S.mt>=GX_AT){const i=S.f.findIndex(f=>f.ch===GN&&f.hp>0);if(i>=0)S.gx={t:0,i};else S.gxd=1}
