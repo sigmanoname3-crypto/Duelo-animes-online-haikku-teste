@@ -1,6 +1,6 @@
 const http=require('http'),fs=require('fs'),path=require('path'),{WebSocketServer}=require('ws'),Game=require('./game.js');
-const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/muda-giorno.mp3':'muda-giorno.mp3','/muda-requiem.mp3':'muda-requiem.mp3','/killer-queen-barrage.mp3':'killer-queen-barrage.mp3','/killer-queen-first-bomb.mp3':'killer-queen-first-bomb.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
-const T={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.mp3':'audio/mpeg'};
+const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/muda-giorno.mp3':'muda-giorno.mp3','/muda-requiem.mp3':'muda-requiem.mp3','/map-mansao.jpg':'map-mansao.jpg','/map-arena.jpg':'map-arena.jpg','/kore-ga-requiem-da.mp3':'kore-ga-requiem-da.mp3','/muda-requiem-final.mp3':'muda-requiem-final.mp3','/killer-queen-barrage.mp3':'killer-queen-barrage.mp3','/killer-queen-first-bomb.mp3':'killer-queen-first-bomb.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
+const T={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.mp3':'audio/mpeg','.jpg':'image/jpeg'};
 const server=http.createServer((req,res)=>{
  const f=FILES[req.url.split('?')[0]];
  if(!f){res.writeHead(404);return res.end('404')}
@@ -40,17 +40,17 @@ wss.on('connection',ws=>{
   else if(d.t==='cancel'){unq(ws);leave(ws,true)}
   else if(d.t==='pick'&&m&&!m.S&&m.team){m.pick[i]=Number.isInteger(d.ch)&&d.ch>=0&&d.ch<=9?d.ch:0;m.rdy[i]=false;teamOpp(m)}
   else if(d.t==='pick'&&m&&!m.S){m.pick[i]=m.t2?(Array.isArray(d.ch)?[...new Set(d.ch.filter(c=>Number.isInteger(c)&&c>=0&&c<=9))].slice(0,2):[]):(d.ch===1?1:d.ch===2?2:d.ch===3?3:d.ch===4?4:d.ch===5?5:d.ch===6?6:d.ch===7?7:d.ch===8?8:d.ch===9?9:0);m.rdy[i]=false;tell(o,m,i)}
-  else if(d.t==='opts'&&m&&!m.S&&i===0){m.o={map:d.map===1?1:0,mus:d.mus?1:0};if(o&&o.readyState===1)o.send(JSON.stringify({t:'opts',map:m.o.map,mus:m.o.mus}))}
+  else if(d.t==='opts'&&m&&!m.S&&i===0){m.o={map:d.map>=0&&d.map<=3?d.map|0:0,mus:d.mus?1:0};if(o&&o.readyState===1)o.send(JSON.stringify({t:'opts',map:m.o.map,mus:m.o.mus}))}
   else if(d.t==='ready'&&m&&!m.S&&m.team){m.rdy[i]=true;teamOpp(m);if(m.rdy.every(Boolean))begin(m)}
   else if(d.t==='ready'&&m&&!m.S&&(!m.t2||m.pick[i].length===2)){m.rdy[i]=true;tell(o,m,i);if(m.rdy[0]&&m.rdy[1])begin(m)}
   else if(d.t==='in'&&m&&m.S&&d.i){const x=d.i;ws.inp.l=!!x.l;ws.inp.r=!!x.r;ws.inp.g=!!x.g;
-   for(const k of ['jb','hv','d','pw','sp','sp2','nk','ju','tg','fu','sp3'])if(x[k])ws.inp[k]=1;
+   for(const k of ['jb','hv','d','pw','sp','sp2','nk','ju','tg','fu','sp3','sp4'])if(x[k])ws.inp[k]=1;
    if(x.cl&&(m.S.cl||m.S.dc))ws.inp.cl=Math.min(4,(ws.inp.cl||0)+1)}});
  ws.on('close',()=>{unq(ws);leave(ws,true)})});
 setInterval(()=>{for(const m of matches){
  if(!m.S)continue;
  const[a,b]=m.p;
- if(!m.S.over){if(m.team)Game.tick(m.S,teamIn(m,0),teamIn(m,1),1/60);else Game.tick(m.S,a.inp,b.inp,1/60);for(const w of m.p)w.inp.jb=w.inp.hv=w.inp.d=w.inp.pw=w.inp.sp=w.inp.sp2=w.inp.nk=w.inp.ju=w.inp.tg=w.inp.fu=w.inp.sp3=w.inp.cl=0}
+ if(!m.S.over){if(m.team)Game.tick(m.S,teamIn(m,0),teamIn(m,1),1/60);else Game.tick(m.S,a.inp,b.inp,1/60);for(const w of m.p)w.inp.jb=w.inp.hv=w.inp.d=w.inp.pw=w.inp.sp=w.inp.sp2=w.inp.nk=w.inp.ju=w.inp.tg=w.inp.fu=w.inp.sp3=w.inp.sp4=w.inp.cl=0}
  const s=JSON.stringify({t:'st',S:m.S});m.p.forEach(w=>w.readyState===1&&w.send(s));
  if(m.S.over&&!m.end)m.end=Date.now();
  if(m.end&&Date.now()-m.end>1500){m.p.forEach(w=>{if(w.m===m)w.m=null});matches.delete(m)}}},1000/60);
