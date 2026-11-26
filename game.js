@@ -1,6 +1,6 @@
 (function(R){
-const G=250,CL_T=3,CL_MUL=2.3,CL_R=44,DN_T=6,DN_N=8,DN_NERF=.1,ZP=1.5,ZA=1.3,ZR=.07,W=672,CR=100,XD=.25,D={jab:.3,heavy:.315,power:.7,throw:.55,ssj3:.8,dodge:.35,hit:.3,rasen:.55,nika:1,raio:.9,tail:.6,fuse:.9,fstrike:.5,rball:.5,torn:.8,acerto:.6,bdpunch:.45,grab:.5,drag:4,beatdown:9.3,dempsey:1.5,gazela:.8,ibpunch:.55,ibeat:13.5,gbar:6.7,gsoul:.7,kcar:.6,btd:.6},A={jab:.1,heavy:.105,power:.35,throw:.3,rasen:.3,raio:.6,tail:.3,fstrike:.2,rball:.2,torn:.5,acerto:.3,bdpunch:.2,ibpunch:.3,gsoul:.35,kcar:.3,btd:.3},
-BR=13,BR_HITS=10,BRB_M=1.25,BRB_SPD=250,GR_SPD=560,GR_DASH=.35,GR_R=62,DRAG_SPD=220,DRAG_GO=1.6,DRAG_RET=1.6,DRAG_DMG=4,DRAG_TICK=.3,DRAG_SLAM=0,DRAG_BACK=40,DRAG_FRONT=160,SOP_DMG=4,BD_T=9,FIN_T=2.2,BD_DMG=1.5,BD_GAP=.15,BD_REL=-.045,BD_COST=60,BD_R=360,BD_KV=1100,ORB=20,BEAM=20,SHU=20,RASEN=20,DRAIN=.5,BAZ=20,BAZR=240,NWAIT=10,NIKA_HP=.2,RAIO_COST=Math.round(70*.8),RAIO_DMG=20,TAIL_DMG=20,TAILR=135,DIN_HEAL=.4,MN_T=12,MN_DMG=.8,MN_CD=1,MN_SPD=130,SWAPCD=3,BEN_EN=4,JV=520,JG=1500,AIR=45,PETRI_T=2,PETRI_DMG=10,GAZE_SPD=420,RAIO_SPD=340,HAKI_T=10,HAKI_M=1.3,PARAL_T=3,PARAL_SPD=320,PARAL_DMG=0,ACE_DMG=20,BALLS=2,BALL_BUFF=.2,BALL_SPD=520,ACE_SPD=330,TORN_T=10,TG=1400,TORN_DPS=4,GI=11,IP=12,GN=30,KR=31,GS_T=4,GS_R=100,GB_T=6.7,GB_GAP=.1,GB_DMG=30/Math.round(GB_T/GB_GAP),GB_EN=.1,KQ_DMG=.15,KQ_BTD_SPD=1100,KQ_BTD_COST=50,KQ_CAR_DMG=10,KQ_CAR_SPD=200,KQ_CAR_STUN=1,KQ_BOOM_N=4,KQ_BOOM=30,KQ_FUSE=1.8,KQ_T=6.9,KQ_N=200,KQ_GAP=KQ_T/KQ_N,GB_REGEN=8,GB_R=90,IB_T=12.94,IB_DMG=90/38,IB_RATE=3,IB_R=90,IB_COST=70,STUN_T=3,CH=[{n:'Goko',skill:'Kamehamehu',cost:50,sp:60,spName:'SSJ',pass:'Zenkai: +50% socos · +30% habilidades · -7% dano recebido'},{n:'Narutu',skill:'Esfera Azul',cost:40,sp:80,spName:'Shuriken',sp2:70,sp2Name:'Rasen Shuriken'},{n:'Luffo',skill:'Bazuuka',cost:40,pass:'Haki do Armamento · Nika · Raio do Céu'},{n:'Diogo',skill:'Petrificar',cost:25,sp:100,spName:'Dinossauro',sp2:50,sp2Name:'Digos Sauros',pass:'Era Jurássica: 8 socos transformam o alvo em dinossauro (6s, -10% de dano)'},{n:'Vegetal',skill:'Galcku Roo',cost:50,sp:60,pass:'Zenkai: +50% socos · +30% habilidades · -7% dano recebido'},{n:'Girino',skill:'Paralisação',cost:30,sp:80,spName:'Tornadua',sp2:40,sp2Name:'Acerto',sp3:60,sp3Name:'Beatdown'},{n:'Ippu',skill:'Dempsey Pro',cost:50,sp2:30,sp2Name:'Soco da Gazela',sp3:IB_COST,sp3Name:'Beatdown'},{n:'Brócolis',skill:'Sopro Gigantesco',cost:50,sp2:40,sp2Name:'Agarrão Rasante',pass:'Zenkai Lendário: socos e habilidades ganham dano igual à % de vida perdida · -10% dano recebido · LSSJ Berserk: ao receber 10 golpes, o cabelo muda'},{n:'Giurnu',skill:'Barragem',cost:30,sp2:40,sp2Name:'Alma Fora do Corpo',pass:'Experiência de Ouru: o stand fica em suas costas e é ele quem ataca'},{n:'Yoshikagu Kiro',skill:'Barragem',cost:30,sp:KQ_BTD_COST,spName:'Bolha de Gato',sp2:30,sp2Name:'Carrinho',pass:'Rainha do Assassinato: o stand fica em suas costas e é ele quem ataca · no 4º soco seguido, o alvo explode · Bites the Dust (só na forma Bite the Dustu): depois de usar a passiva, ao chegar a 40% de vida ou menos volta 1 minuto no tempo com 70% de vida (1 vez)'}];
+const G=250,DC_T=3,DC_WIN=.12,DC_DMG=50,DC_KV=1500,DC_RB=2.4,CL_T=3,CL_MUL=2.3,CL_R=44,DN_T=6,DN_N=8,DN_NERF=.1,ZP=1.5,ZA=1.3,ZR=.07,W=672,CR=100,XD=.25,D={jab:.3,heavy:.315,power:.7,throw:.55,ssj3:.8,dodge:.35,dcpunch:.5,hit:.3,rasen:.55,nika:1,raio:.9,tail:.6,fuse:.9,fstrike:.5,rball:.5,torn:.8,acerto:.6,bdpunch:.45,grab:.5,drag:4,beatdown:9.3,dempsey:1.5,gazela:.8,ibpunch:.55,ibeat:13.5,gbar:6.7,gsoul:.7,kcar:.6,btd:.6},A={jab:.1,heavy:.105,power:.35,throw:.3,rasen:.3,raio:.6,tail:.3,fstrike:.2,rball:.2,torn:.5,acerto:.3,bdpunch:.2,ibpunch:.3,dcpunch:.2,gsoul:.35,kcar:.3,btd:.3},
+BR=13,BR_HITS=10,BRB_M=1.25,BRB_SPD=250,GR_SPD=560,GR_DASH=.35,GR_R=62,DRAG_SPD=220,DRAG_GO=1.6,DRAG_RET=1.6,DRAG_DMG=4,DRAG_TICK=.3,DRAG_SLAM=0,DRAG_BACK=40,DRAG_FRONT=160,SOP_DMG=4,BD_T=9,FIN_T=2.2,BD_DMG=1.5,BD_GAP=.15,BD_REL=-.045,BD_COST=60,BD_R=360,BD_KV=1100,ORB=20,BEAM=20,SHU=20,RASEN=20,DRAIN=.5,BAZ=20,BAZR=240,NWAIT=10,NIKA_HP=.2,RAIO_COST=Math.round(70*.8),RAIO_DMG=20,TAIL_DMG=20,TAILR=135,DIN_HEAL=.4,MN_T=12,MN_DMG=.8,MN_CD=1,MN_SPD=130,SWAPCD=3,BEN_EN=4,JV=520,JG=1500,AIR=45,PETRI_T=2,PETRI_DMG=10,GAZE_SPD=420,RAIO_SPD=340,HAKI_T=10,HAKI_M=1.3,PARAL_T=3,PARAL_SPD=320,PARAL_DMG=0,ACE_DMG=20,BALLS=2,BALL_BUFF=.2,BALL_SPD=520,ACE_SPD=330,TORN_T=10,TG=1400,TORN_DPS=4,GI=11,IP=12,GN=30,KR=31,GS_T=4,GS_N=3,GS_DMG=15,GS_KV=1100,GS_VY=420,GS_R=100,GB_T=6.7,GB_GAP=.1,GB_DMG=30/Math.round(GB_T/GB_GAP),GER_DMG=46/Math.round(GB_T/GB_GAP),GB_EN=.1,KQ_DMG=.15,KQ_BTD_SPD=1100,KQ_BTD_COST=50,KQ_CAR_DMG=10,KQ_CAR_SPD=200,KQ_CAR_STUN=1,KQ_BOOM_N=4,KQ_BOOM=30,KQ_FUSE=1.8,KQ_T=6.9,KQ_N=200,KQ_GAP=KQ_T/KQ_N,GB_REGEN=8,GB_R=90,IB_T=12.94,IB_DMG=90/38,IB_RATE=3,IB_R=90,IB_COST=70,STUN_T=3,CH=[{n:'Goko',skill:'Kamehamehu',cost:50,sp:60,spName:'SSJ',pass:'Zenkai: +50% socos · +30% habilidades · -7% dano recebido'},{n:'Narutu',skill:'Esfera Azul',cost:40,sp:80,spName:'Shuriken',sp2:70,sp2Name:'Rasen Shuriken'},{n:'Luffo',skill:'Bazuuka',cost:40,pass:'Haki do Armamento · Nika · Raio do Céu'},{n:'Diogo',skill:'Petrificar',cost:25,sp:100,spName:'Dinossauro',sp2:50,sp2Name:'Digos Sauros',pass:'Era Jurássica: 8 socos transformam o alvo em dinossauro (6s, -10% de dano)'},{n:'Vegetal',skill:'Galcku Roo',cost:50,sp:60,pass:'Zenkai: +50% socos · +30% habilidades · -7% dano recebido'},{n:'Girino',skill:'Paralisação',cost:30,sp:80,spName:'Tornadua',sp2:40,sp2Name:'Acerto',sp3:60,sp3Name:'Beatdown'},{n:'Ippu',skill:'Dempsey Pro',cost:50,sp2:30,sp2Name:'Soco da Gazela',sp3:IB_COST,sp3Name:'Beatdown'},{n:'Brócolis',skill:'Sopro Gigantesco',cost:50,sp2:40,sp2Name:'Agarrão Rasante',pass:'Zenkai Lendário: socos e habilidades ganham dano igual à % de vida perdida · -10% dano recebido · LSSJ Berserk: ao receber 10 golpes, o cabelo muda'},{n:'Giurnu',skill:'Barragem',cost:30,sp2:15,sp2Name:'Alma Fora do Corpo',pass:'Experiência de Ouru: o stand fica em suas costas e é ele quem ataca'},{n:'Yoshikagu Kiro',skill:'Barragem',cost:30,sp:KQ_BTD_COST,spName:'Bolha de Gato',sp2:30,sp2Name:'Carrinho',pass:'Rainha do Assassinato: o stand fica em suas costas e é ele quem ataca · no 4º soco seguido, o alvo explode · Bites the Dust (só na forma Bite the Dustu): depois de usar a passiva, ao chegar a 40% de vida ou menos volta 1 minuto no tempo com 70% de vida (1 vez)'}];
 const FU_T=40,FU_COST=0,FU_HP=2,FU_BASE=1.25,SP3C=25,RB_NORMAL=20,RB_EVIL=30,FZ=c=>c>3&&c<11||c>=14&&c<30,FI=c=>c<11?c-4:c>=14&&c<30?c-7:-1,EVL=new Set(),pk=f=>f.v?4:f.ch===GN?8:f.ch===KR?9:f.ch===GI?5:f.ch===IP?6:f.ch===BR?7:f.ch,hs=(f,p)=>f.pc?f.pc.includes(p):pk(f)===p,zk=f=>hs(f,0)||hs(f,4),zp=(f,b)=>{const l=hs(f,7)?1+Math.max(0,1-f.hp/f.mhp):1;return zk(f)?Math.max(b,l):l},gb=f=>f.ch===GI||!!(f.pc&&f.pc.includes(5)),zr=o=>hs(o,7)?1-ZR-.03:zk(o)?1-ZR:1,hitOk=(o,f)=>!(o.hp<=0||o.s==='dodge'&&o.t<.25||o.s==='nika'||o.s==='fuse'||o.inv>0)&&!(o.g&&(f.x-o.x)*o.dir>0),frz=f=>f.bm>0||f.pt>0||f.pz>0||f.tw>0||f.st>0||f.sl>0||f.bd>0||f.gr>0||f.fin>0,crossing=f=>f.s==='dodge'&&f.t<XD&&!!f.cv,evil=o=>o.ch===3||o.ch===6||o.ch===8||o.ch===9||EVL.has(o.ch),
 FCH=[{n:'Narugoko',skill:'Kameha-Rasengan',cost:40,sp:50,spName:'Modo Sábio Supremo',sp2:30,sp2Name:'Rajada Fundida'},
 {n:'Gokuffo',skill:'Gomu Gomu Kamehameha',cost:40,sp:50,spName:'Nika Saiyajin',sp2:30,sp2Name:'Rajada Fundida'},
@@ -41,6 +41,7 @@ function hurt(o,d,src,rng,ng){
  if(hs(o,6)&&o.hp<=o.mhp*.5)d*=.9;
  d*=zr(o);if(src.dn>0)d*=1-DN_NERF;
  if(o.s==='dodge'&&o.t<.25||o.s==='nika'||o.s==='fuse'||o.inv>0)return;
+ if(src.ch===GN){src.ghit=1;src.inv=0}
  if(frz(o)){o.hp=Math.max(0,o.hp-d);if(!(src.tr>0)&&!ng)src.en=Math.min(100,src.en+d*.6);return}
  if(o.g&&(src.x-o.x)*o.dir>0){d*=rng?.5:.2;if(!(o.tr>0))o.en=Math.min(100,o.en+3)}
  else if(!(o.ch===GI&&(o.s==='power'||o.s==='torn'||o.s==='acerto'||o.s==='bdpunch'||o.s==='beatdown'))&&!(o.ch===IP&&o.s==='ibeat')&&!((o.ch===GN||o.ch===KR)&&o.s==='gbar')&&o.s!=='drag'){o.s='hit';o.t=0;o.done=false;o.orb=0;o.x+=src.dir*(d>10?16:7)}
@@ -57,10 +58,9 @@ function petriPara(t,src){
  if(t.g&&(src.x-t.x)*t.dir>0)return false;
  t.pt=PETRI_T;t.pz=PARAL_T;t.s='idle';t.t=0;t.g=false;t.orb=0;t.done=false;
  t.hp=Math.max(0,t.hp-PETRI_DMG*zr(t)*(src.dn>0?1-DN_NERF:1));if(!(src.tr>0))src.en=Math.min(100,src.en+PETRI_DMG*.6);return true}
-const PJ_R=150,PJ_DMG=30,PJ_KV=1100,PJ_VY=420;
 const clOk=f=>(f.ch===0||f.ch===BR)&&!frz(f),clK=f=>f.ch===BR?2:f.v?1:0;
-function clash(S,x,m,pj){S.cl={t:CL_T,mt:CL_T,c:[0,0],x,m,pj:!!pj,k:[clK(S.f[0]),clK(S.f[1])]};S.cw=null;
- for(const f of S.f){f.s=pj?'jab':'power';f.t=.36;f.done=true;f.g=false;f.orb=0;f.inv=.05;f.y=0;f.vy=0;f.kv=0}}
+function clash(S,x,m){S.cl={t:CL_T,mt:CL_T,c:[0,0],x,m,k:[clK(S.f[0]),clK(S.f[1])]};S.cw=null;
+ for(const f of S.f){f.s='power';f.t=.36;f.done=true;f.g=false;f.orb=0;f.inv=.05;f.y=0;f.vy=0;f.kv=0}}
 function clTry(f,o,S,mul){
  const mf=mul*zp(f,ZA),m=[1,1];
  if(o.s==='power'&&!o.done&&clOk(o)){m[f.i]=mf;m[o.i]=mulOf(o)*zp(o,ZA);clash(S,(f.x+o.x)/2,m);return true}
@@ -68,7 +68,7 @@ function clTry(f,o,S,mul){
  return false}
 function clUp(S,a,b,dt){const c=S.cl,p=S.f[0],e=S.f[1];
  c.c[0]+=Math.min(4,a.cl||0);c.c[1]+=Math.min(4,b.cl||0);c.t-=dt;
- for(const f of S.f){f.s=c.pj?'jab':'power';f.t=c.pj?(c.mt-c.t)%.3:.36;f.done=true;f.inv=.05;f.g=false;f.y=0;f.vy=0;f.kv=0;f.dir=S.f[1-f.i].x>f.x?1:-1}
+ for(const f of S.f){f.s='power';f.t=.36;f.done=true;f.inv=.05;f.g=false;f.y=0;f.vy=0;f.kv=0;f.dir=S.f[1-f.i].x>f.x?1:-1}
  const tot=c.c[0]+c.c[1],half=Math.max(0,Math.abs(e.x-p.x)/2-24);
  c.x=(p.x+e.x)/2+(e.x>p.x?1:-1)*(tot?(c.c[0]-c.c[1])/tot:0)*half*.85;
  if(c.t>0)return;
@@ -76,9 +76,28 @@ function clUp(S,a,b,dt){const c=S.cl,p=S.f[0],e=S.f[1];
  for(const f of S.f){f.s='idle';f.t=0;f.done=false;f.inv=0}
  if(w<0){ex.push({x:c.x,t:0});ex.push({x:c.x,t:0,k:9,c:11});S.cw={w:-1,t:0};return}
  const f=S.f[w],t=S.f[1-w];
- if(c.pj){hurt(t,PJ_DMG*c.m[w],f,1);t.kv=f.dir*PJ_KV;t.vy=PJ_VY;t.y=.01;ex.push({x:t.x,t:0,k:21});ex.push({x:t.x,t:0,k:9,c:11});S.cw={w,t:0,pj:1};return}
  hurt(t,BEAM*c.m[w]*CL_MUL,f,1);t.kv=f.dir*700;t.vy=300;t.y=.01;
  ex.push({x:t.x,t:0});ex.push({x:t.x,t:0,k:5});ex.push({x:t.x,t:0,k:9,c:11});S.cw={w,t:0}}
+function dcTry(S){const p=S.f[0],e=S.f[1];
+ if(S.over||S.cl||S.dc||S.rb)return;
+ const ok=f=>f.s==='dodge'&&f.t<=DC_WIN+.02&&f.y<AIR&&f.hp>0&&f.dx===f.dir&&!frz(f)&&!(f.bd>0)&&!(f.gr>0);
+ if(ok(p)&&ok(e)&&p.dir!==e.dir&&Math.abs(p.t-e.t)<=DC_WIN&&Math.abs(p.x-e.x)<=CR+60)dcStart(S)}
+function dcStart(S){const p=S.f[0],e=S.f[1];
+ const mid=Math.max(52,Math.min(W-52,(p.x+e.x)/2)),s=p.dir;p.x=mid-s*24;e.x=mid+s*24;
+ for(const f of S.f){f.s='dclash';f.t=0;f.done=true;f.g=false;f.orb=0;f.inv=.05;f.y=0;f.vy=0;f.kv=0;f.cv=0;f.dx=0}
+ S.dc={t:DC_T,mt:DC_T,c:[0,0],x:mid};S.cw=null;(S.ex||(S.ex=[])).push({x:mid,t:0,k:16,dir:0})}
+function dcUp(S,a,b,dt){const c=S.dc,ex=S.ex||(S.ex=[]);
+ c.c[0]+=Math.min(4,a.cl||0);c.c[1]+=Math.min(4,b.cl||0);c.t-=dt;
+ for(const f of S.f){f.s='dclash';f.t+=dt;f.ph+=dt;f.mv=0;f.inv=.05;f.g=false;f.y=0;f.vy=0;f.kv=0;f.dir=S.f[1-f.i].x>f.x?1:-1}
+ if(c.t>0)return;
+ S.dc=null;for(const f of S.f)f.inv=0;
+ const w=c.c[0]>c.c[1]?0:c.c[1]>c.c[0]?1:-1;
+ if(w<0){for(const f of S.f){f.s='hit';f.t=0;f.done=false;f.kv=-f.dir*650;f.vy=220;f.y=.01;ex.push({x:f.x,t:0,k:9,c:11})}return}
+ const f=S.f[w];f.s='dcpunch';f.t=0;f.done=false}
+function dcHit(f,o,S,mul){
+ o.inv=0;o.g=false;hurt(o,DC_DMG*mul*zp(f,ZA),f,1);
+ o.s='hit';o.t=0;o.done=false;o.kv=f.dir*DC_KV;o.vy=420;o.y=.01;
+ S.rb={t:0,x:o.x,w:f.i};const ex=S.ex||(S.ex=[]);ex.push({x:o.x,t:0,k:16,dir:f.dir});ex.push({x:o.x,t:0,k:9,c:11})}
 function lostB(S,q){const o=S.f[q.ow];if(o&&gb(o))(o.lost||(o.lost=[])).push({x:Math.max(20,Math.min(W-20,q.x)),y:q.y||G-84})}
 function paralyze(t,src){
  if(t.s==='dodge'&&t.t<.25||t.s==='nika'||t.s==='fuse'||t.inv>0||frz(t))return;
@@ -92,9 +111,12 @@ function swap(S,i){const a=S.f[i],b=S.bn[i];b.x=a.x;b.dir=a.dir;b.i=i;b.y=0;b.vy
 function mulOf(f){return(gb(f)?1+BALL_BUFF*(f.balls||0):1)*(f.tr>0?1.5:1)*(f.haki>0?HAKI_M:1)*(hs(f,6)&&f.hp<=f.mhp*.5?1.5:1)*(FZ(f.ch)?FU_BASE*(f.ov>0?1.4:1):1)}
 function strike(f,o,S){
  const mul=mulOf(f);
+ if(f.s==='dcpunch'){dcHit(f,o,S,mul);return}
  if(f.s==='kcar'){S.pr.push({x:f.x+f.dir*34,dir:f.dir,ow:f.i,k:23});return}
  if(f.s==='btd'){S.pr.push({x:f.x+f.dir*30,dir:f.dir,ow:f.i,k:24});return}
- if(f.s==='gsoul'){if((o.x-f.x)*f.dir>0&&Math.abs(o.x-f.x)<GS_R&&o.y<AIR&&!(o.sl>0)&&!(o.bd>0)&&!(o.gr>0)&&hitOk(o,f)){o.sl=GS_T;o.pt=o.pz=o.tw=0;o.s='idle';o.t=0;o.g=false;o.orb=0;o.done=false;(S.ex||(S.ex=[])).push({x:o.x,t:0,k:17})}return}
+ if(f.s==='gsoul'){if((o.x-f.x)*f.dir>0&&Math.abs(o.x-f.x)<GS_R&&o.y<AIR&&!(o.sl>0)&&!(o.bd>0)&&!(o.gr>0)&&hitOk(o,f)){const n=f.scn||0,blk=o.g&&(f.x-o.x)*o.dir>0,ex=S.ex||(S.ex=[]);
+  if(n>=GS_N){f.scn=0;hurt(o,GS_DMG*mul*zp(f,ZA),f,0,0);o.sl=GS_T;o.pt=o.pz=o.tw=0;o.s='idle';o.t=0;o.g=false;o.orb=0;o.done=false;ex.push({x:o.x,t:0,k:17})}
+  else{f.scn=n+1;hurt(o,GS_DMG*mul*zp(f,ZA),f,0,0);if(!blk){o.s='hit';o.t=0;o.done=false;o.orb=0;o.kv=f.dir*GS_KV;o.vy=GS_VY;o.y=.01;ex.push({x:o.x,t:0,k:5});ex.push({x:o.x,t:0,k:9,c:11})}}}return}
  if(o.y>=AIR&&['tail','jab','heavy'].includes(f.s))return;
  if(o.tw>0&&(f.s==='heavy'||f.s==='jab'&&!(f.orb>0)))return;
  if(f.s==='bdpunch'){if((o.x-f.x)*f.dir>0&&Math.abs(o.x-f.x)<BD_R&&o.y<AIR&&!(o.bd>0)&&hitOk(o,f)){o.bd=BD_T;o.bdm=BD_T;o.pt=o.pz=o.tw=0;o.s='idle';o.t=0;o.g=false;o.orb=0;o.done=false;f.s='beatdown';f.t=0;f.done=false;f.bdn=0;(S.ex||(S.ex=[])).push({x:o.x,t:0,k:5})}return}
@@ -114,8 +136,8 @@ function strike(f,o,S){
 function step(f,o,i,dt,S){
  f.t+=dt;f.ph+=dt;f.mv=0;if(f.y>0||f.vy>0){f.vy-=JG*dt;f.y+=f.vy*dt;if(f.y<=0){f.y=0;f.vy=0}}
  if(f.kv){f.x=Math.max(28,Math.min(W-28,f.x+f.kv*dt));f.kv*=Math.max(0,1-3.5*dt);if(Math.abs(f.kv)<15)f.kv=0}
- if(f.hf>0)f.hf=Math.max(0,f.hf-dt);if(f.haki>0)f.haki=Math.max(0,f.haki-dt);if(f.inv>0)f.inv=Math.max(0,f.inv-dt);if(f.ch===IP&&(f.s==='dempsey'||f.s==='gazela'||f.s==='ibpunch'||f.s==='ibeat'))f.inv=Math.max(f.inv||0,.04);if(f.ov>0)f.ov=Math.max(0,f.ov-dt);if(f.dn>0){f.dn=Math.max(0,f.dn-dt);if(f.dn<=0)(S.ex||(S.ex=[])).push({x:f.x,t:0,k:12})}
- if(f.tr>0){f.en=Math.max(0,f.en-DRAIN*dt);if(f.en<=0)f.tr=0}else f.en=Math.min(100,f.en+(FZ(f.ch)?9:f.ch===GN?GB_REGEN:6)*dt);if(f.orb>0)f.orb-=dt;
+ if(f.hf>0)f.hf=Math.max(0,f.hf-dt);if(f.haki>0)f.haki=Math.max(0,f.haki-dt);if(f.inv>0)f.inv=Math.max(0,f.inv-dt);if(f.ch===IP&&(f.s==='dempsey'||f.s==='gazela'||f.s==='ibpunch'||f.s==='ibeat'))f.inv=Math.max(f.inv||0,.04);if(f.ch===GN){if(f.s==='jab'||f.s==='heavy'||f.s==='gbar'||f.s==='gsoul'){if(f.s!==f.gps||f.t<(f.glt||0))f.ghit=0;f.gps=f.s;f.glt=f.t;if(!f.ghit)f.inv=Math.max(f.inv||0,.04)}else{f.gps=null;f.ghit=0}}if(f.ov>0)f.ov=Math.max(0,f.ov-dt);if(f.dn>0){f.dn=Math.max(0,f.dn-dt);if(f.dn<=0)(S.ex||(S.ex=[])).push({x:f.x,t:0,k:12})}
+ if(f.tr>0){f.en=Math.max(0,f.en-DRAIN*dt);if(f.en<=0)f.tr=0}else if(!((f.ch===GN||f.ch===KR)&&f.s==='gbar'))f.en=Math.min(100,f.en+(FZ(f.ch)?9:f.ch===GN?GB_REGEN:6)*dt);if(f.orb>0)f.orb-=dt;
  if(f.bm>0){f.bm=Math.max(0,f.bm-dt);if(f.bm<=0){const kq=S.f[f.bmo];f.hp=Math.max(0,f.hp-KQ_BOOM);f.s='hit';f.t=0;f.done=false;f.kv=(kq?kq.dir:-f.dir)*450;f.vy=320;f.y=.01;(S.ex||(S.ex=[])).push({x:f.x,t:0,k:22})}}
  if(frz(f)){if((f.ch===GI||isDio(f))&&!f.done&&(f.s==='power'||f.s==='torn'||f.s==='acerto'))(f.lost||(f.lost=[])).push({x:f.x,y:G-30});f.pt=Math.max(0,(f.pt||0)-dt);f.pz=Math.max(0,(f.pz||0)-dt);f.tw=Math.max(0,(f.tw||0)-dt);f.st=Math.max(0,(f.st||0)-dt);if(f.sl>0){f.sl=Math.max(0,f.sl-dt);if(f.sl<=0)(S.ex||(S.ex=[])).push({x:f.x,t:0,k:17})}if(f.fin>0){f.fin=Math.max(0,f.fin-dt);if(f.fin<=0)f.fk=0}f.g=false;f.s='idle';f.t=0;f.done=false;f.dir=o.x>f.x?1:-1;return}
  if(f.s!=='idle'&&f.t>=(f.ch===KR&&f.s==='gbar'?KQ_T:D[f.s])){f.s='idle';f.t=0}
@@ -296,7 +318,7 @@ function unfuse(S,i){
  for(const c of[z.a,z.b]){c.hp=Math.max(1,Math.min(c.mhp,c.hp*r));c.x=F.x;c.dir=F.dir;c.y=F.y||0;c.vy=F.vy||0;c.s='idle';c.t=0;c.done=false;c.g=false;c.pt=0;c.pz=0;c.tw=0;c.orb=0;c.i=i}
  z.a.dn=F.dn||0;z.a.en=Math.min(100,F.en);z.b.en=Math.min(100,F.en*.5);
  S.f[i]=z.a;S.bn[i]=z.b;S.fz[i]=null;(S.sc||(S.sc=[0,0]))[i]=SWAPCD;(S.ex||(S.ex=[])).push({x:F.x,t:0,k:8,c:0})}
-const CS_T=9.5,CS_AT=20,KC_T=10,KC_AT=10,GX_T=18.5,GX_AT=30;
+const CS_T=9.5,CS_AT=20,KC_T=10,KC_AT=10,GX_I=7,GX_T=GX_I+12.5,GX_AT=30;
 const SNAP=new WeakMap(),BTD_BACK=60,BTD_HP=.7,BTD_TH=.4,BTD_FREEZE=1.5;
 function snapSave(S){let L=SNAP.get(S);if(!L){L=[];SNAP.set(S,L)}const last=L[L.length-1];if(last&&S.mt-last.t<1)return;
  try{L.push({t:S.mt,d:structuredClone({f:S.f,bn:S.bn,fz:S.fz,fu1:S.fu1,sc:S.sc,mn:S.mn,csd:S.csd})})}catch(e){return}
@@ -323,9 +345,10 @@ function tick(S,a,b,dt){
    else if((i?b:a).fu&&!S.fu1[i]&&canF(f0,S.bn[i])&&f0.s==='idle'&&!frz(f0)&&f0.en>=FU_COST&&S.bn[i].hp>0)fuse(S,i)}
   const sc=S.sc||(S.sc=[0,0]);for(const i of[0,1]){sc[i]=Math.max(0,sc[i]-dt);const f=S.f[i],bn=S.bn[i];bn.en=Math.min(100,bn.en+BEN_EN*dt);if(bn.dn>0)bn.dn=Math.max(0,bn.dn-dt);if((i?b:a).tg&&sc[i]<=0&&f.s==='idle'&&!frz(f)&&bn.hp>0){swap(S,i);sc[i]=SWAPCD}}p=S.f[0];e=S.f[1]}
  if(S.cw&&(S.cw.t+=dt)>1.4)S.cw=null;
- const pjOk=(f,o)=>f.s==='dodge'&&o.s==='dodge'&&f.t<.25&&o.t<.25&&f.dx*(o.x-f.x)>0&&o.dx*(f.x-o.x)>0&&f.hp>0&&o.hp>0&&!frz(f)&&!frz(o)&&f.y<AIR&&o.y<AIR&&Math.abs(o.x-f.x)<PJ_R&&(o.x-f.x)*f.dir>0&&(f.x-o.x)*o.dir>0;
- if(!S.cl&&pjOk(p,e))clash(S,(p.x+e.x)/2,[1,1],1);
- if(S.cl)clUp(S,a,b,dt);else{step(p,e,a,dt,S);if(!S.cl)step(e,p,b,dt,S)}
+ if(S.rb&&(S.rb.t+=dt)>DC_RB)S.rb=null;
+ if(!S.cl&&!S.dc)dcTry(S);
+ for(const f of S.f)if(f.s==='dclash'&&!S.dc&&S.f[1-f.i].s!=='dcpunch'){f.s='idle';f.t=0}
+ if(S.cl)clUp(S,a,b,dt);else if(S.dc)dcUp(S,a,b,dt);else{step(p,e,a,dt,S);if(!S.cl)step(e,p,b,dt,S)}
  for(const f of S.f)if(f.s==='drag'){const t=S.f[1-f.i];
   if(f.hp<=0||t.hp<=0||!(t.gr>0)){t.gr=0;f.s='idle';f.t=0;f.dp=0;f.lzl=0;continue}
   f.x+=f.dir*DRAG_SPD*dt;const wall=f.dir>0?f.x>=W-28:f.x<=28;f.x=Math.max(28,Math.min(W-28,f.x));
@@ -349,7 +372,7 @@ function tick(S,a,b,dt){
   if(f.t>=IB_T){t.bd=0;t.s='hit';t.t=0;t.done=false;t.kv=f.dir*BD_KV;t.vy=380;t.y=.01;f.s='idle';f.t=0;(S.ex||(S.ex=[])).push({x:t.x,t:0,k:9,c:11})}}
  for(const f of S.f)if((f.ch===GN||f.ch===KR)&&f.s==='gbar'){const o=S.f[1-f.i],gp=f.ch===KR?KQ_GAP:GB_GAP,n=f.ch===KR?KQ_N:Math.round(GB_T/gp);
   while(f.gn<n&&f.t>=(f.gn+.5)*gp){f.gn++;
-   if(o.hp>0&&(o.x-f.x)*f.dir>0){const ox=o.x;hurt(o,f.ch===KR?KQ_DMG:GB_DMG,f,0,1);if(f.ch!==KR)f.en=Math.min(100,f.en+GB_EN);if(!frz(o))o.x=ox;(S.ex||(S.ex=[])).push({x:o.x,t:0,k:5})}}}
+   if(o.hp>0&&(o.x-f.x)*f.dir>0&&Math.abs(o.x-f.x)<=GB_R){const ox=o.x;hurt(o,f.ch===KR?KQ_DMG:f.ger?GER_DMG:GB_DMG,f,0,1);if(!frz(o))o.x=ox;(S.ex||(S.ex=[])).push({x:o.x,t:0,k:5})}}}
  for(const t of S.f)if(t.sl>0&&S.f[1-t.i].hp<=0)t.sl=0;
  for(const t of S.f)if(t.bd>0){const a=S.f[1-t.i];if(a.s!=='beatdown'&&a.s!=='ibeat')t.bd=0}
  for(const f of S.f)if(f.tw>0)f.hp=Math.max(0,f.hp-(f.twk?DT_DPS:TORN_DPS)*zr(f)*dt);
@@ -362,7 +385,7 @@ function tick(S,a,b,dt){
   if(Math.abs(dx)>m.sd){m.x+=m.dir*MN_SPD*dt;m.mv=1}
   else if(m.cd<=0&&!(t.y>=AIR)){m.cd=MN_CD;m.bt=.3;hurt(t,MN_DMG,{x:m.x,dir:m.dir,en:0,tr:0},0,1);(S.ex||(S.ex=[])).push({x:t.x,t:0,k:5})}
   m.x=Math.max(28,Math.min(W-28,m.x));return true});
- S.ex=(S.ex||[]).filter(e=>(e.t+=dt)<(e.k===8?1.2:e.k===11?.9:e.k===12?.7:e.k===15||e.k===21||e.k===17?.7:e.k===22?.8:.4));
+ S.ex=(S.ex||[]).filter(e=>(e.t+=dt)<(e.k===16?.8:e.k===8?1.2:e.k===11?.9:e.k===12?.7:e.k===15||e.k===21||e.k===17?.7:e.k===22?.8:.4));
  if(!S.cl){const qa=S.pr.find(q=>!q.k&&q.ow===0),qb=S.pr.find(q=>!q.k&&q.ow===1);
   if(qa&&qb&&qa.dir!==qb.dir&&Math.abs(qb.x-qa.x)<CL_R&&clOk(S.f[0])&&clOk(S.f[1])&&['idle','power'].includes(S.f[0].s)&&['idle','power'].includes(S.f[1].s)){
    S.pr=S.pr.filter(q=>q!==qa&&q!==qb);clash(S,(qa.x+qb.x)/2,[qa.m||1,qb.m||1])}}
@@ -423,6 +446,6 @@ function tick(S,a,b,dt){
  for(const f of S.f)if(f.hp<=0&&hs(f,2)&&!f.nk1){f.nk1=1;f.dy=NWAIT;f.s='hit';f.t=0;f.g=false}
  if(!S.f.some(f=>f.dy>0)){if(S.bn)for(const i of[0,1])if(S.f[i].hp<=0&&S.bn[i].hp>0)swap(S,i);
   if(S.f[0].hp<=0||S.f[1].hp<=0){S.over=1;S.win=S.f[1].hp<=0?0:1}}}
-const api={GX_T,KQ_BTD_COST,KC_T,CL_T,CL_MUL,CS_T,GN,KR,GS_T,GS_R,GB_T,GB_GAP,KQ_GAP,GB_R,DIO_F,DT_N,DT_BITES,BR,BD_T,FIN_T,BD_DMG,BD_GAP,BD_REL,bdTf,IB_T,IB_RATE,DRAG_BACK,DN_T,W,IP,STUN_T,FZ,PARAL_T,TORN_T,G,D,CH,mk,mkP,canF,SP3C,tick,ai,BAZR,RAIO_COST,sp2c,hasSp2,TAILR,FCH,FU_T,FU_COST,fuOf,chOf:cof,FI,PB,NEWF,pk,PS:['Zenkai','','Haki + Nika','Era Jurássica','Zenkai','Steel Ball','Ippu (<50% de vida)','Zenkai Lendário + LSSJ Berserk','Experiência de Ouru','Rainha do Assassinato']};
+const api={DC_RB,DC_T,GX_I,GX_T,KQ_BTD_COST,KC_T,CL_T,CL_MUL,CS_T,GN,KR,GS_T,GS_R,GS_N,GB_T,GB_GAP,KQ_GAP,GB_R,DIO_F,DT_N,DT_BITES,BR,BD_T,FIN_T,BD_DMG,BD_GAP,BD_REL,bdTf,IB_T,IB_RATE,DRAG_BACK,DN_T,W,IP,STUN_T,FZ,PARAL_T,TORN_T,G,D,CH,mk,mkP,canF,SP3C,tick,ai,BAZR,RAIO_COST,sp2c,hasSp2,TAILR,FCH,FU_T,FU_COST,fuOf,chOf:cof,FI,PB,NEWF,pk,PS:['Zenkai','','Haki + Nika','Era Jurássica','Zenkai','Steel Ball','Ippu (<50% de vida)','Zenkai Lendário + LSSJ Berserk','Experiência de Ouru','Rainha do Assassinato']};
 if(typeof module!=='undefined')module.exports=api;else R.Game=api;
 })(this);

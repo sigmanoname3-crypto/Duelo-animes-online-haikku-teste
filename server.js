@@ -1,5 +1,5 @@
 const http=require('http'),fs=require('fs'),path=require('path'),{WebSocketServer}=require('ws'),Game=require('./game.js');
-const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/muda-giorno.mp3':'muda-giorno.mp3','/killer-queen-barrage.mp3':'killer-queen-barrage.mp3','/killer-queen-first-bomb.mp3':'killer-queen-first-bomb.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
+const FILES={'/':'index.html','/index.html':'index.html','/game.js':'game.js','/manifest.json':'manifest.json','/sw.js':'sw.js','/icon-192.png':'icon-192.png','/icon-512.png':'icon-512.png','/galick-ho.mp3':'galick-ho.mp3','/muda-giorno.mp3':'muda-giorno.mp3','/muda-requiem.mp3':'muda-requiem.mp3','/killer-queen-barrage.mp3':'killer-queen-barrage.mp3','/killer-queen-first-bomb.mp3':'killer-queen-first-bomb.mp3','/kamehameha_swf.mp3':'kamehameha_swf.mp3','/girino-spin.mp3':'girino-spin.mp3','/sound-of-the-spin.mp3':'sound-of-the-spin.mp3','/gyro-hahaha-nyoho.mp3':'gyro-hahaha-nyoho.mp3','/ippu-beatdown.mp3':'ippu-beatdown.mp3','/sopro-gigantesco.mp3':'sopro-gigantesco.mp3','/agarrao-rasante.mp3':'agarrao-rasante.mp3','/steel-ball-run.mp3':'steel-ball-run.mp3'};
 const T={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.png':'image/png','.mp3':'audio/mpeg'};
 const server=http.createServer((req,res)=>{
  const f=FILES[req.url.split('?')[0]];
@@ -45,7 +45,7 @@ wss.on('connection',ws=>{
   else if(d.t==='ready'&&m&&!m.S&&(!m.t2||m.pick[i].length===2)){m.rdy[i]=true;tell(o,m,i);if(m.rdy[0]&&m.rdy[1])begin(m)}
   else if(d.t==='in'&&m&&m.S&&d.i){const x=d.i;ws.inp.l=!!x.l;ws.inp.r=!!x.r;ws.inp.g=!!x.g;
    for(const k of ['jb','hv','d','pw','sp','sp2','nk','ju','tg','fu','sp3'])if(x[k])ws.inp[k]=1;
-   if(x.cl&&m.S.cl)ws.inp.cl=Math.min(4,(ws.inp.cl||0)+1)}});
+   if(x.cl&&(m.S.cl||m.S.dc))ws.inp.cl=Math.min(4,(ws.inp.cl||0)+1)}});
  ws.on('close',()=>{unq(ws);leave(ws,true)})});
 setInterval(()=>{for(const m of matches){
  if(!m.S)continue;
