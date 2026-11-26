@@ -407,7 +407,7 @@ function tick(S,a,b,dt){
   else if(!(t.y>=AIR)&&!(t.s==='dodge'&&t.t<.25||t.s==='nika'||t.s==='fuse'||t.inv>0)){m.sd=1;m.bt=.25;m.t=Math.min(m.t,.4);(t.psn||(t.psn=[])).push(GXS_POIT);S.ex.push({x:t.x,t:0,k:5})}
   m.x=Math.max(28,Math.min(W-28,m.x));return true});
  for(const f of S.f)if(f.psn&&f.psn.length){f.psn=f.psn.map(v=>v-dt).filter(v=>v>0);if(f.hp>0)f.hp=Math.max(0,f.hp-GXS_POIS*dt*f.psn.length)}
- S.ex=(S.ex||[]).filter(e=>(e.t+=dt)<(e.k===16?.8:e.k===8?1.2:e.k===11?.9:e.k===28?.9:e.k===12?.7:e.k===15||e.k===21||e.k===17||e.k===26?.7:e.k===22?.8:.4));
+ S.ex=(S.ex||[]).filter(e=>(e.t+=dt)<(e.k===16?.8:e.k===8?1.2:e.k===11?.9:e.k===28||e.k===27?.9:e.k===12?.7:e.k===15||e.k===21||e.k===17||e.k===26?.7:e.k===22?.8:.4));
  if(!S.cl){const qa=S.pr.find(q=>!q.k&&q.ow===0),qb=S.pr.find(q=>!q.k&&q.ow===1);
   if(qa&&qb&&qa.dir!==qb.dir&&Math.abs(qb.x-qa.x)<CL_R&&clOk(S.f[0])&&clOk(S.f[1])&&['idle','power'].includes(S.f[0].s)&&['idle','power'].includes(S.f[1].s)){
    S.pr=S.pr.filter(q=>q!==qa&&q!==qb);clash(S,(qa.x+qb.x)/2,[qa.m||1,qb.m||1])}}
